@@ -1,0 +1,20 @@
+# Ensure the PHP app is served from the /freelancer folder.
+# If an index.html exists, this makes index.php take precedence.
+DirectoryIndex index.php index.html
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /freelancer/
+
+    # Redirect any file-manager or bad path using index.html/index.php in the URL.
+    RewriteCond %{THE_REQUEST} \s/index\.(php|html)/(.*) [NC]
+    RewriteRule ^index\.(php|html)/(.*)$ /freelancer/$2 [L,R=301]
+
+    # Serve existing files/directories directly.
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Otherwise, fallback to index.php for the app.
+    RewriteRule ^ index.php [L,QSA]
+</IfModule>
