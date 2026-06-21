@@ -7,6 +7,7 @@ require_once __DIR__ . '/../includes/emails.php';
 $success = false;
 $error = '';
 require_once __DIR__ . '/../includes/header.php';
+$dbErrorMessage = defined('DB_ERROR_MESSAGE') ? DB_ERROR_MESSAGE : '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
@@ -24,16 +25,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 <div class="auth-layout"><div class="auth-card">
-    <div class="brand">![🛡️](https://fonts.gstatic.com/s/e/notoemoji/17.0/1f6e1_fe0f/72.png) <?= escape(APP_NAME) ?></div>
+    <div class="brand"><span class="brand-icon">🛡️</span><?= escape(APP_NAME) ?></div>
 
     <?php if ($success): ?>
     <div style="text-align: center; padding: 20px 0;">
-        <div style="font-size: 3rem; margin-bottom: 16px;">![📧](https://fonts.gstatic.com/s/e/notoemoji/17.0/1f4e7/72.png)</div>
+        <div style="font-size: 3rem; margin-bottom: 16px;">📧</div>
         <h3 style="margin-bottom: 8px;">Check your email</h3>
         <p class="text-sm text-muted">If an account exists with that email, we've sent a password reset link. It expires in 1 hour.</p>
         <a href="login.php" class="btn btn-primary" style="margin-top: 24px;">Back to Sign In</a>
     </div>
     <?php else: ?>
+    <?php if ($dbErrorMessage): ?>
+        <div class="alert alert-warning">Unable to connect to the database. <?= escape($dbErrorMessage) ?></div>
+    <?php endif; ?>
     <?php if ($error): ?><div class="badge badge-red mb-4" style="display:block; padding: 8px 16px;"><?= escape($error) ?></div><?php endif; ?>
 
     <h3 style="margin-bottom: 16px;">Reset Password</h3>

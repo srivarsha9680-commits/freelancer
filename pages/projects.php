@@ -17,7 +17,7 @@ require_once __DIR__ . '/../includes/header.php';
 <div class="container" style="padding-top: 32px;">
     <?php if ($flash): ?>
     <div class="card" style="background:#FFFBEB; border:1px solid #FCD34D;">
-        <strong>![⚠️](https://fonts.gstatic.com/s/e/notoemoji/17.0/26a0_fe0f/72.png) <?= escape($flash['message']) ?></strong>
+        <strong>✅ <?= escape($flash['message']) ?></strong>
     </div>
     <?php endif; ?>
 
@@ -25,7 +25,7 @@ require_once __DIR__ . '/../includes/header.php';
     <div class="card" style="background:#ECFDF5; border:1px solid #A7F3D0;">Change order sent to client.</div>
     <?php endif; ?>
 
-    <div class="flex justify-between items-center mb-4"><h2>Projects</h2><a href="project-create.php" class="btn btn-primary">+ New Project</a></div>
+    <div class="flex justify-between items-center mb-4"><h2>Projects</h2><div class="flex gap-2"><a href="<?= appPath('/pages/dashboard.php') ?>" class="btn btn-secondary">← Dashboard</a><a href="project-create.php" class="btn btn-primary">+ New Project</a></div></div>
     <div class="card"><form method="GET"><input type="text" name="q" class="form-control" placeholder="Search projects..." value="<?= escape($search) ?>"></form></div>
     <?php if (!$projects): ?>
     <div class="empty-state">
@@ -44,7 +44,7 @@ require_once __DIR__ . '/../includes/header.php';
     ?>
     <div class="card project-card">
         <div><div class="flex gap-2 items-center"><strong><?= escape($p['name']) ?></strong><span class="badge badge-<?= $sc ?>"><?= escape(ucfirst($p['status'])) ?></span></div><div class="project-meta">Client: <?= escape($p['client_name']) ?> · <?= formatMoney((float)$p['price'], $currency) ?> (<?= escape($p['pricing_type']) ?>)</div><div class="project-meta">Scope: <?= (int)$p['scope_count'] ?> · Changes: <?= (int)$p['change_count'] ?> · Saved: <span class="text-green"><?= formatMoney((float)$p['saved_amount'], $currency) ?></span></div></div>
-        <div class="flex gap-2"><a href="project-detail.php?id=<?= (int)$p['id'] ?>" class="btn btn-secondary btn-sm">View</a><a href="change-log.php?project_id=<?= (int)$p['id'] ?>" class="btn btn-primary btn-sm">Log Change</a></div>
+        <div class="flex gap-2"><a href="project-detail.php?id=<?= (int)$p['id'] ?>" class="btn btn-secondary">View</a><a href="change-log.php?project_id=<?= (int)$p['id'] ?>" class="btn btn-primary">Log Change</a></div>
     </div>
     <?php endforeach; endif; ?>
 </div>

@@ -457,6 +457,9 @@ function userInitial(): string {
 
 function createPasswordReset(string $email): void {
     global $pdo;
+    if (!isset($pdo) || $pdo === null) {
+        throw new ValidationException('Server error: unable to access the database. Please try again later.');
+    }
     $stmt = $pdo->prepare("SELECT id, full_name FROM users WHERE lower(email) = ?");
     $stmt->execute([$email]);
     $user = $stmt->fetch();
@@ -475,6 +478,9 @@ function createPasswordReset(string $email): void {
 
 function consumePasswordReset(string $token): array {
     global $pdo;
+    if (!isset($pdo) || $pdo === null) {
+        throw new ValidationException('Server error: unable to access the database. Please try again later.');
+    }
     if (!preg_match('/^[0-9a-f]{64}$/', $token)) throw new ValidationException("Invalid reset link.");
 
     $stmt = $pdo->prepare("SELECT pr.*, u.email, u.full_name FROM password_resets pr JOIN users u ON u.id = pr.user_id WHERE pr.token = ? AND pr.used_at IS NULL AND pr.expires_at > CURRENT_TIMESTAMP");
@@ -486,6 +492,9 @@ function consumePasswordReset(string $token): array {
 
 function completePasswordReset(string $token, string $newPassword): void {
     global $pdo;
+    if (!isset($pdo) || $pdo === null) {
+        throw new ValidationException('Server error: unable to access the database. Please try again later.');
+    }
     $reset = consumePasswordReset($token);
     if (strlen($newPassword) < 8) throw new ValidationException("Password must be at least 8 characters.");
     $hash = password_hash($newPassword, PASSWORD_DEFAULT);

@@ -12,11 +12,11 @@ if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROT
 $currentScheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
 
 // Allow overriding DB credentials via environment variables for easier deployment.
-$envDbHost = getenv('DB_HOST') ?: 'mysql.us.stackcp.com';
+$envDbHost = getenv('DB_HOST') ?: 'sdb-k.hosting.stackcp.net';
 $envDbUser = getenv('DB_USER') ?: 'freelancer_user';
 $envDbPass = getenv('DB_PASS') ?: 'Karachi2';
 $envDbName = getenv('DB_NAME') ?: 'freelancer_db-313931450d';
-$envDbPort = getenv('DB_PORT') ?: '44140';
+$envDbPort = getenv('DB_PORT') ?: '3306';
 
 define('DB_HOST', $envDbHost);
 define('DB_USER', $envDbUser);
@@ -24,7 +24,9 @@ define('DB_PASS', $envDbPass);
 define('DB_NAME', $envDbName);
 define('DB_PORT', $envDbPort);
 
-$customAppUrl = getenv('APP_URL') ?: 'https://mintbrand.buzz/freelancer';
+// When running the PHP built-in server for local dev, prefer a local http APP_URL
+$defaultAppUrl = (php_sapi_name() === 'cli-server') ? 'http://localhost:8001' : 'https://mintbrand.buzz/freelancer';
+$customAppUrl = getenv('APP_URL') ?: $defaultAppUrl;
 define('APP_URL', rtrim($customAppUrl, '/'));
 define('APP_BASE', rtrim(parse_url(APP_URL, PHP_URL_PATH) ?: '', '/'));
 define('APP_NAME', 'Scope Creep Defender');
@@ -35,7 +37,10 @@ define('APP_SCHEME', parse_url(APP_URL, PHP_URL_SCHEME) ?: $currentScheme);
 $dbErrorMessage = '';
 $dbAvailable = false;
 
-if (php_sapi_name() !== 'cli' && !$isLocalhost && APP_SCHEME === 'https' && $currentScheme !== 'https') {
+// Only redirect to HTTPS if we're NOT behind a reverse proxy (like Cloudflare)
+// When behind a reverse proxy, it already handles the HTTPS redirect
+$isBehindReverseProxy = isset($_SERVER['HTTP_X_FORWARDED_PROTO']);
+if (php_sapi_name() !== 'cli' && !$isLocalhost && APP_SCHEME === 'https' && $currentScheme !== 'https' && !$isBehindReverseProxy) {
     header('Location: https://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . $_SERVER['REQUEST_URI'], true, 301);
     exit;
 }

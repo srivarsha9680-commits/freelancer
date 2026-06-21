@@ -37,18 +37,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $resetUser && !$error) {
 }
 ?>
 <div class="auth-layout"><div class="auth-card">
-    <div class="brand">![🛡️](https://fonts.gstatic.com/s/e/notoemoji/17.0/1f6e1_fe0f/72.png) <?= escape(APP_NAME) ?></div>
+    <div class="brand"><span class="brand-icon">🛡️</span><?= escape(APP_NAME) ?></div>
 
     <?php if ($success): ?>
     <div style="text-align: center; padding: 20px 0;">
-        <div style="font-size: 3rem; margin-bottom: 16px;">![✅](https://fonts.gstatic.com/s/e/notoemoji/17.0/2705/72.png)</div>
+        <div style="font-size: 3rem; margin-bottom: 16px;">✅</div>
         <h3 style="margin-bottom: 8px;">Password Updated</h3>
         <p class="text-sm text-muted">Your password has been changed. You can now sign in.</p>
         <a href="login.php" class="btn btn-primary" style="margin-top: 24px;">Sign In</a>
     </div>
     <?php elseif ($error && !$resetUser): ?>
     <div style="text-align: center; padding: 20px 0;">
-        <div style="font-size: 3rem; margin-bottom: 16px;">![❌](https://fonts.gstatic.com/s/e/notoemoji/17.0/274c/72.png)</div>
+        <div style="font-size: 3rem; margin-bottom: 16px;">❌</div>
         <h3 style="margin-bottom: 8px;">Link Invalid</h3>
         <p class="text-sm text-muted"><?= escape($error) ?></p>
         <a href="forgot-password.php" class="btn btn-secondary" style="margin-top: 24px;">Request New Link</a>
