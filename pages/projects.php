@@ -6,7 +6,11 @@ $tenant = requireTenant();
 $projects = getTenantProjects();
 $currency = $tenant['currency'] ?? 'USD';
 $search = trim($_GET['q'] ?? '');
-if ($search) $projects = array_filter($projects, fn($p) => stripos($p['name'], $search) !== false || stripos($p['client_name'], $search) !== false);
+if ($search) {
+    $projects = array_filter($projects, function ($p) use ($search) {
+        return stripos($p['name'], $search) !== false || stripos($p['client_name'], $search) !== false;
+    });
+}
 $flash = getFlash();
 require_once __DIR__ . '/../includes/header.php';
 ?>

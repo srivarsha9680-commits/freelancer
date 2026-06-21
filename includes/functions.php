@@ -13,7 +13,7 @@ if (session_status() === PHP_SESSION_NONE) {
     $localhostHosts = ['localhost', '127.0.0.1', '[::1]'];
     if ($currentHost !== '' && !in_array($currentHost, $localhostHosts, true)) {
         $appDomain = strtolower(APP_DOMAIN);
-        if ($currentHost === $appDomain || str_ends_with($currentHost, '.' . $appDomain)) {
+        if ($currentHost === $appDomain || substr($currentHost, -strlen('.' . $appDomain)) === '.' . $appDomain) {
             $cookieParams['domain'] = APP_DOMAIN;
         }
     }
@@ -148,7 +148,7 @@ function resolveTenant(): ?array {
         $host = strtolower($_SERVER['HTTP_HOST']);
         $base = strtolower(preg_replace('/^www\./', '', APP_DOMAIN));
         $host = preg_replace('/^www\./', '', $host);
-        if ($host !== $base && str_ends_with($host, '.' . $base)) {
+        if ($host !== $base && substr($host, -strlen('.' . $base)) === '.' . $base) {
             $slug = substr($host, 0, -(strlen('.' . $base)));
         }
     }
@@ -424,7 +424,7 @@ function escape(string $str): string {
 }
 
 function redirect(string $url): void {
-    if (str_starts_with($url, '/')) {
+    if (substr($url, 0, 1) === '/') {
         $url = appPath($url);
     }
     header("Location: $url");
