@@ -14,8 +14,8 @@ echo "Server software: " . ($_SERVER['SERVER_SOFTWARE'] ?? 'n/a') . "\n";
 echo "App URL: " . (defined('APP_URL') ? APP_URL : 'n/a') . "\n";
 echo "DB_AVAILABLE: " . (defined('DB_AVAILABLE') && DB_AVAILABLE ? '1' : '0') . "\n";
 echo "DB_ERROR_MESSAGE: " . (defined('DB_ERROR_MESSAGE') ? DB_ERROR_MESSAGE : '') . "\n";
-$drivers = defined('PDO') ? implode(',', PDO::getAvailableDrivers()) : 'none';
-echo "PDO drivers: " . $drivers . "\n";
+$drivers = class_exists('PDO') ? implode(',', PDO::getAvailableDrivers()) : 'none';
+echo "PDO drivers: " . ($drivers === '' ? 'none' : $drivers) . "\n";
 // If PDO is available, try a lightweight query for SQLite fallback
 if (isset($pdo) && $pdo instanceof PDO) {
     try {

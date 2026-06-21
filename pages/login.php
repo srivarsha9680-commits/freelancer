@@ -1,23 +1,6 @@
 <?php
-// Temporary debug wrapper: visit ?debug=1 to show bootstrap errors (remove after debugging)
-$__debug_mode = isset($_GET['debug']) && $_GET['debug'] === '1';
-if ($__debug_mode) {
-    ini_set('display_errors', '1');
-    ini_set('display_startup_errors', '1');
-    error_reporting(E_ALL);
-}
-try {
-    require_once __DIR__ . '/../config/database.php';
-    require_once __DIR__ . '/../includes/functions.php';
-} catch (Throwable $e) {
-    if ($__debug_mode) {
-        http_response_code(500);
-        echo "<pre>Bootstrap error: " . htmlspecialchars($e->getMessage()) . "\nIn: " . htmlspecialchars($e->getFile()) . " on line " . $e->getLine() . "\n\n" . htmlspecialchars($e->getTraceAsString()) . "</pre>";
-    } else {
-        error_log('Bootstrap error: ' . $e->getMessage());
-    }
-    exit;
-}
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../includes/functions.php';
 
 // Ensure guests only
 requireGuest();
