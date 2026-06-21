@@ -131,6 +131,7 @@ if (!class_exists('PDO')) {
                     estimated_hours REAL DEFAULT 0,
                     timeline_impact TEXT,
                     email_content TEXT,
+                    email_tone TEXT DEFAULT 'friendly',
                     created_by INTEGER,
                     sent_at DATETIME,
                     responded_at DATETIME,

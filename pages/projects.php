@@ -24,7 +24,12 @@ require_once __DIR__ . '/../includes/header.php';
     <div class="flex justify-between items-center mb-4"><h2>Projects</h2><a href="project-create.php" class="btn btn-primary">+ New Project</a></div>
     <div class="card"><form method="GET"><input type="text" name="q" class="form-control" placeholder="Search projects..." value="<?= escape($search) ?>"></form></div>
     <?php if (!$projects): ?>
-    <div class="empty-state"><div class="empty-icon">![📋](https://fonts.gstatic.com/s/e/notoemoji/17.0/1f4cb/72.png)</div><h3><?= $search ? 'No matches' : 'No projects yet' ?></h3><a href="project-create.php" class="btn btn-primary" style="margin-top:24px;">Create Project</a></div>
+    <div class="empty-state">
+        <div class="empty-icon">📋</div>
+        <h3><?= $search ? 'No matches' : 'No projects yet' ?></h3>
+        <p><?= $search ? 'Try a different search term or create a new project.' : 'Create a project to begin tracking scope and changes.' ?></p>
+        <a href="project-create.php" class="btn btn-primary" style="margin-top:24px;">Create Project</a>
+    </div>
     <?php else: foreach ($projects as $p):
         $sc = 'gray';
         if (($p['status'] ?? '') === 'active') {
